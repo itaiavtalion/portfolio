@@ -138,7 +138,7 @@ const PROJECTS = [
         heading: "CAD",
         body: "Exploded SolidWorks model of the digits, palm anchor, pins and forearm housing.",
         images: [
-          { src: "assets/img/prosthetic-hand/cad-exploded.png", caption: "Exploded SolidWorks CAD model detailing components." }
+          { src: "assets/img/prosthetic-hand/cad-exploded.jpg", caption: "Exploded SolidWorks CAD model detailing components." }
         ]
       },
       {
