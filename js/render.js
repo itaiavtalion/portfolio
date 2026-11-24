@@ -312,8 +312,9 @@
     (p.sections || []).forEach(function (s) {
       c.appendChild(el('section', { class: 'block reveal' }, [
         el('h2', { text: s.heading }),
-        el('div', { class: 'prose' }, body(s.body)),
-        figs(s.images)
+        s.body ? el('div', { class: 'prose' }, body(s.body)) : null,
+        figs(s.images),
+        (s.videos && s.videos.length) ? el('div', { class: 'figs figs--videos' }, s.videos.map(videoFig)) : null
       ]));
     });
 

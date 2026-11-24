@@ -225,60 +225,79 @@ const PROJECTS = [
   {
     id: "gyro-gimbal",
     order: 4,
-    draft: true,
+    draft: false,
     title: "Self-Stabilizing Gyro Gimbal",
-    subtitle: "[[ One sentence: what the gimbal stabilizes and why you built it. ]]",
+    subtitle: "A handheld 3-axis gimbal that keeps a sensor or small camera level while the handle moves: an MPU-6050, three servos and a PID loop on an ESP32, all packaged inside a 3D-printed grip.",
     category: "Mechatronics · Control Systems",
-    timeline: "[[ Month Year ]]",
-    role: "[[ e.g. Concept, CAD, electronics, firmware ]]",
-    cover: "assets/img/gyro-gimbal/bench.jpg",
-    coverPosition: "50% 50%",
+    timeline: "Oct – Nov 2026",
+    role: "Concept, CAD, electronics, firmware",
+    cover: "assets/img/gyro-gimbal/cad-assembled.png",
+    coverPosition: "50% 12%",
     summary:
-      "[[ One paragraph. What the device does, what it stabilizes, how the IMU and servos work together, and what the 3D-printed cylindrical housing packages. End with the result you measured. ]]",
+      "A hands-on robotics and control-systems build: a top mounting plate for a sensor or small camera stays level no matter how the handle is tilted or turned. A GY-521 (MPU-6050) measures tilt and rotation rate, an ESP32 fuses the readings with a complementary filter and runs a PID loop, and three TowerPro MG996R metal-gear servos move pitch, roll and yaw brackets to cancel the motion. The hollow cylindrical handle doubles as the grip and hides the 2S LiPo, buck converter and wiring, so the gimbal runs untethered for about an hour to an hour and a half per charge.",
     highlights: [
-      { value: "[[ 2 ]]", label: "[[ axes of stabilization ]]" },
-      { value: "[[ ## ms ]]", label: "[[ correction response time ]]" },
-      { value: "[[ ## h ]]", label: "[[ runtime on the 1100 mAh LiPo ]]" }
+      { value: "3 axes", label: "pitch, roll and yaw, each on its own servo" },
+      { value: "5.0 V", label: "regulated rail for servos and ESP32, steady under load" },
+      { value: "1–1.5 h", label: "runtime on the 2S 1100 mAh LiPo" }
     ],
-    skills: ["Control systems", "IMU sensor fusion", "Embedded firmware", "Power management", "Mechanical packaging"],
-    software: ["Arduino IDE", "Arduino Cloud", "Claude Code", "SolidWorks"],
-    hardware: ["ESP32", "Servo motors (2-axis)", "Buck converter", "1100 mAh LiPo battery", "[[ IMU model, e.g. MPU-6050 ]]", "3D-printed cylindrical housing"],
+    skills: ["Control systems (PID)", "IMU sensor fusion", "Embedded firmware", "Power management", "Mechanical packaging", "Fit and clearance checks"],
+    software: ["SolidWorks", "Arduino Cloud Editor", "Arduino IDE", "Claude Code"],
+    hardware: ["ESP-WROOM-32 DevKit (30-pin)", "GY-521 MPU-6050 IMU", "3× TowerPro MG996R servos", "5 A DC-DC buck converter", "2S 7.4 V 1100 mAh LiPo", "3D-printed handle and brackets", "Perfboard carrier"],
     specs: [
-      { parameter: "[[ Stabilization range ]]", target: "[[ ± ## ° ]]", achieved: "[[ measured ]]", status: "todo" },
-      { parameter: "[[ Correction latency ]]", target: "[[ < ## ms ]]", achieved: "[[ measured ]]", status: "todo" },
-      { parameter: "[[ Runtime ]]", target: "[[ ## h ]]", achieved: "[[ measured ]]", status: "todo" }
+      { parameter: "Stabilization axes", target: "3-axis: pitch, roll, yaw", achieved: "Three independent servo-driven brackets", status: "met" },
+      { parameter: "Angle tracking", target: "Real-time angles that match actual motion", achieved: "Verified against the live 3D simulation", status: "met" },
+      { parameter: "Range of motion", target: "Full tilt and rotation, no bracket collisions", achieved: "Confirmed on the assembled unit", status: "met" },
+      { parameter: "Power rail", target: "Steady 5.0 V to servos and ESP32", achieved: "5.0 V held under servo load (buck display)", status: "met" },
+      { parameter: "Runtime", target: "Untethered handheld use", achieved: "About 1–1.5 h per charge", status: "met" }
     ],
     sections: [
       {
         heading: "Mechanical design",
         body:
-          "[[ Describe the two-axis servo bracket on top of the cylindrical housing, how the electronics stack slides into the tube, and why you chose this form factor. ]]",
+          "The cylindrical handle, the slotted top mounting plate and all three L-shaped servo brackets were designed and fit-checked in SolidWorks alongside imported models of the off-the-shelf electronics, then 3D-printed. The hollow cylinder is both a comfortable handheld grip and the enclosure: battery, buck converter and wiring live inside so the gimbal runs wirelessly. The perfboard and buck converter mount on a custom internal carrier board that slides cleanly into the handle, with the servo wires routed up through the center.",
         images: [
-          { src: "assets/img/gyro-gimbal/cad-assembled.png", caption: "Assembled CAD: two-axis servo bracket on the cylindrical housing." },
-          { src: "assets/img/gyro-gimbal/cad-exploded.png", caption: "Exploded CAD: servo bracket, housing, electronics stack, end caps." }
+          { src: "assets/img/gyro-gimbal/cad-assembled.png", caption: "Assembled CAD: three stacked L-brackets carry the pitch, roll and yaw servos above the cylindrical handle." },
+          { src: "assets/img/gyro-gimbal/cad-exploded.png", caption: "Exploded CAD: top plate and servo brackets, handle, slide-in carrier board with the electronics, and end cap." }
+        ]
+      },
+      {
+        heading: "Control loop",
+        body:
+          "The ESP32 continuously reads the MPU-6050 to track which way the handle is tilting. To get a clean angle without jitter or drift, it blends two signals with a complementary filter: fast rotation updates from the gyroscope, anchored to gravity by the accelerometer. A PID loop then checks how far off-level the top platform is and commands the servos to rotate the opposite way to cancel the movement.\n\n" +
+          "Tuning was done by hand: raise the proportional gain until the servos react quickly without shaking, then add derivative damping so the platform stops without overshooting or bouncing. The Arduino Cloud Editor was used to write and upload the code, read live pitch, roll and yaw numbers, and run an on-screen 3D block that mirrors the sensor's movement in real time.",
+        images: []
+      },
+      {
+        heading: "Demo",
+        body: "",
+        images: [],
+        videos: [
+          { src: "assets/video/gimbal-demo-1.mp4", poster: "assets/video/gimbal-demo-1-poster.jpg", caption: "Breadboard and 3D simulation test: tilting the ESP32 + MPU-6050 by hand while the laptop shows live pitch, roll and yaw and a 3D block mirrors the motion." },
+          { src: "assets/video/gimbal-demo-2.mp4", poster: "assets/video/gimbal-demo-2-poster.jpg", caption: "Assembled gimbal test: tilting and rotating the sensor while the 3-axis gimbal, powered through the 5.0 V buck converter, keeps the top platform level." }
         ]
       },
       {
         heading: "Electronics and power",
         body:
-          "[[ Describe the ESP32, the buck converter stepping the LiPo down for the servos and logic, the IMU, and how the wiring is routed inside the tube. ]]",
-        images: []
+          "A 2-cell 7.4 V 1100 mAh LiPo feeds a 5 A DC-DC buck converter with a built-in voltage display, which steps the pack down to 5.0 V for the three servos and the ESP32 on a shared rail with a common ground. The ESP-WROOM-32 DevKit and GY-521 sit on a perfboard inside the handle. Output was checked at a steady 5.0 V under servo load on the converter's display.",
+        images: [
+          { src: "assets/img/gyro-gimbal/bench.jpg", caption: "Bench prototype before packaging: ESP32 on perfboard, buck converter with voltage display, 2S 1100 mAh LiPo and the printed handle." }
+        ]
       },
       {
-        heading: "Control firmware",
+        heading: "What's next",
         body:
-          "[[ Describe the control loop: IMU read rate, filtering, PID or complementary filter, servo update rate, and how you tuned it. Mention Arduino Cloud if you used it for monitoring. ]]",
+          "- Switch to a 9-axis sensor with a built-in compass to eliminate yaw drift.\n" +
+          "- Replace the geared hobby servos with silent brushless gimbal motors for smoother motion.\n" +
+          "- Replace the hand-wired perfboard inside the tube with a custom PCB.",
         images: []
       }
     ],
     iterations: [
-      { title: "[[ Problem you hit first ]]", problem: "[[ What went wrong ]]", fix: "[[ What you changed and the result ]]" },
-      { title: "[[ Second problem ]]", problem: "[[ What went wrong ]]", fix: "[[ What you changed and the result ]]" }
+      { title: "Reversed axis direction and uncentered servos", problem: "Tilting the board made the servos push further into the tilt instead of leveling out, and the brackets sat crooked at rest.", fix: "Flipped the sign for that axis in the code and ran a centering script to lock all servos at 90° before tightening the servo horns." },
+      { title: "Packaging the electronics inside the handle", problem: "Fitting the perfboard, buck converter, battery and wiring inside the tight cylindrical grip without crowding or pinching wires.", fix: "Imported 3D models of the off-the-shelf components into SolidWorks to verify clearances first, then designed a custom slide-in carrier board that holds the perfboard and buck converter so the whole assembly slips neatly into the handle." }
     ],
     links: [],
-    videos: [
-      { src: "assets/video/gimbal-demo-1.mp4", poster: "assets/video/gimbal-demo-1-poster.jpg", caption: "[[ Demo 1: what this clip shows ]]" },
-      { src: "assets/video/gimbal-demo-2.mp4", poster: "assets/video/gimbal-demo-2-poster.jpg", caption: "[[ Demo 2: what this clip shows ]]" }
-    ]
+    videos: []
   }
 ];
