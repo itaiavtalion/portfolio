@@ -130,7 +130,7 @@ const PROJECTS = [
           "**Forearm electronics housing.** A hollow ergonomic enclosure (7.00\" internal length) carrying the main servo, breadboard, battery pack and Arduino Nano.\n\n" +
           "**Actuation circuitry.** One high-torque servo pulls all five tendon lines simultaneously to execute a unified power grasp.",
         images: [
-          { src: "assets/img/prosthetic-hand/palm-side.jpg", caption: "Printed palm and finger assembly with snap-pin joints and tendon routing." },
+          { src: "assets/img/prosthetic-hand/assembled-hand.jpg", caption: "Fully assembled 3D-printed palm and finger assembly showing anatomical joint alignment." },
           { src: "assets/img/prosthetic-hand/palm-front.jpg", caption: "Front view showing anatomical joint alignment and the offset thumb." }
         ]
       },
