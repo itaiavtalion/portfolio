@@ -20,7 +20,7 @@ const PROFILE = {
   bio: [
     "I'm a mechanical engineering student at NJIT who likes problems that cross disciplines: a valve that has to harvest its own power, a prosthetic hand that has to close in a second for under $30, a product that has to ship flat and survive a storefront wall. I design in SolidWorks and Fusion 360, prototype on FDM printers, and write the firmware that runs on the ESP32 and Arduino boards inside.",
     "Before engineering I earned a B.A. in Economics at Binghamton with a minor in Digital and Data Science, and I spent two years as an appliance repair technician diagnosing 12–240 V circuits, compressors and sealed refrigeration loops. That hands-on diagnostic work is why my projects tend to start on the bench rather than on the screen. I run two small businesses on the side: 3D-Signs, a line of NFC-enabled 3D-printed signage, and Fixora LLC, an appliance repair service.",
-    "[[ Optional third paragraph: what you want to work on next, or what kind of team you're looking for. ]]"
+    "I've been like this since I was a kid: taking things apart to see how they work, then trying to build my own version. That curiosity turned into a habit of always having a project going, and lately into real-world skills from fixing hundreds of appliances and shipping products to paying customers. What I want now is a company where I can keep building, hands-on, and see the whole product cycle from the inside, from first sketch to something that ships, while learning from engineers who have done it at scale."
   ],
   education: [
     { school: "New Jersey Institute of Technology", degree: "B.S. Mechanical Engineering", timeline: "Expected May 2028", location: "Newark, NJ", notes: "Coursework: Statics, Dynamics, Strength of Materials, Engineering Design, Physics, Materials & Processes" },
@@ -50,7 +50,7 @@ const PROFILE = {
     phone: "(201) 240-2184",
     phoneHref: "tel:+12012402184",
     github: "https://github.com/itaiavtalion",
-    linkedin: "",               // paste the full LinkedIn URL here, e.g. https://www.linkedin.com/in/itai-avtalion/
+    linkedin: "https://www.linkedin.com/in/itai-avtalion-b57b0220b/",
     resume: "assets/pdf/itai-avtalion-resume.pdf"
   }
 };
