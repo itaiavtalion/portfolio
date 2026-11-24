@@ -62,7 +62,7 @@
     ];
     root.appendChild(el('div', { class: 'container nav__inner' }, [
       el('a', { href: 'index.html', class: 'nav__logo', 'aria-label': PROFILE.name + ' home' }, [
-        el('span', { class: 'nav__logo-mark', text: PROFILE.initials }), el('span', { text: PROFILE.name })
+        el('img', { class: 'nav__logo-mark', src: 'assets/favicon.svg', alt: '', width: 30, height: 30 }), el('span', { text: PROFILE.name })
       ]),
       el('nav', { 'aria-label': 'Primary' }, el('ul', { class: 'nav__links' }, links.map(function (l) {
         var active = here === l.href || (l.href === 'work.html' && here === 'project.html');
@@ -106,7 +106,10 @@
       ]),
       el('div', { class: 'tile__body' }, [
         el('p', { class: 'tile__summary', html: rich(p.subtitle) }),
-        chipRows(p, 4, ['software', 'hardware'])
+        el('div', { class: 'tile__meta' }, [
+          el('span', { class: 'mono', html: rich(p.timeline) }),
+          el('span', { class: 'tile__cta', html: 'View case study ' + arrow() })
+        ])
       ])
     ]);
   }
