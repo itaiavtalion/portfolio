@@ -7,6 +7,7 @@ const PROFILE = {
   name: "Itai Avtalion",
   firstName: "Itai",
   initials: "IA",
+  photo: "assets/img/itai.jpg",
   tagline: "Mechanical engineering student who builds electromechanical systems end to end: CAD, power electronics, embedded firmware and 3D-printed hardware.",
   eyebrow: "Mechanical Engineering · NJIT '28 · Cresskill, NJ",
   location: "Cresskill, NJ",
@@ -43,7 +44,7 @@ const PROFILE = {
     { group: "Diagnostics & tools", items: ["Digital multimeter", "Amp clamp", "Manifold gauges", "Electronic leak detectors", "Shop power tools"] }
   ],
   languages: ["English (fluent)", "Hebrew (fluent)"],
-  hobbies: ["[[ Hobby ]]", "[[ Hobby ]]", "[[ Hobby ]]", "[[ Hobby ]]"],
+  hobbies: ["Golf", "Guitar", "Sports", "Travel", "Snowboarding", "Lifting"],
   contact: {
     email: "itai.avtalion@gmail.com",
     phone: "(201) 240-2184",

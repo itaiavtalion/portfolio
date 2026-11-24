@@ -24,7 +24,10 @@ Then open http://localhost:8080
 
 ## Files
 
-- `index.html` home: hero, project grid, about, contact
+- `index.html` home: hero + featured projects
+- `work.html` all projects
+- `about.html` bio, education, skills, experience
+- `contact.html` contact details
 - `project.html?id=<slug>` one project's full case study
 - `resume.html` embedded resume
 - `data/projects.js` all project content (the only file you usually touch)

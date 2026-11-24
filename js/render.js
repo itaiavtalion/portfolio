@@ -53,19 +53,20 @@
   // ---------- shared chrome ----------
   function renderNav() {
     var root = document.getElementById('nav'); if (!root) return;
-    var here = page(), hash = location.hash;
+    var here = page();
     var links = [
-      { href: 'index.html#work', label: 'Work', active: here === 'index.html' && (hash === '' || hash === '#work') },
-      { href: 'index.html#about', label: 'About', active: hash === '#about' },
-      { href: 'resume.html', label: 'Resume', active: here === 'resume.html' },
-      { href: 'index.html#contact', label: 'Contact', active: hash === '#contact' }
+      { href: 'work.html', label: 'Projects' },
+      { href: 'about.html', label: 'About' },
+      { href: 'resume.html', label: 'Resume' },
+      { href: 'contact.html', label: 'Contact' }
     ];
     root.appendChild(el('div', { class: 'container nav__inner' }, [
       el('a', { href: 'index.html', class: 'nav__logo', 'aria-label': PROFILE.name + ' home' }, [
         el('span', { class: 'nav__logo-mark', text: PROFILE.initials }), el('span', { text: PROFILE.name })
       ]),
       el('nav', { 'aria-label': 'Primary' }, el('ul', { class: 'nav__links' }, links.map(function (l) {
-        return el('li', {}, el('a', { href: l.href, class: 'nav__link' + (l.active ? ' nav__link--active' : ''), text: l.label }));
+        var active = here === l.href || (l.href === 'work.html' && here === 'project.html');
+        return el('li', {}, el('a', { href: l.href, class: 'nav__link' + (active ? ' nav__link--active' : ''), 'aria-current': active ? 'page' : null, text: l.label }));
       }))),
       el('a', { href: 'mailto:' + PROFILE.contact.email, class: 'nav__cta', text: 'Get in touch' })
     ]));
@@ -79,8 +80,9 @@
   }
 
   // ---------- chips ----------
-  function chipRows(p, limit) {
+  function chipRows(p, limit, only) {
     var rows = [['skills', 'Skills', p.skills], ['software', 'Software', p.software], ['hardware', 'Hardware', p.hardware]];
+    if (only) rows = rows.filter(function (r) { return only.indexOf(r[0]) !== -1; });
     return el('div', { class: 'chiprows' }, rows.map(function (r) {
       var items = (r[2] || []); if (!items.length) return null;
       var shown = limit ? items.slice(0, limit) : items;
@@ -104,7 +106,7 @@
       ]),
       el('div', { class: 'tile__body' }, [
         el('p', { class: 'tile__summary', html: rich(p.subtitle) }),
-        chipRows(p, 4)
+        chipRows(p, 4, ['software', 'hardware'])
       ])
     ]);
   }
@@ -112,13 +114,16 @@
   function renderHero() {
     var root = document.getElementById('hero'); if (!root) return;
     root.appendChild(el('div', { class: 'container hero__inner' }, [
-      el('span', { class: 'eyebrow reveal', text: PROFILE.eyebrow }),
-      el('h1', { class: 'hero__name reveal', text: PROFILE.name }),
-      el('p', { class: 'hero__tagline reveal', html: rich(PROFILE.tagline) }),
-      el('div', { class: 'hero__actions reveal' }, [
-        el('a', { href: '#work', class: 'btn btn--primary', html: 'View projects ' + arrow() }),
-        el('a', { href: 'resume.html', class: 'btn', html: icon('pdf') + ' Resume' })
+      el('div', { class: 'hero__text' }, [
+        el('span', { class: 'eyebrow reveal', text: PROFILE.eyebrow }),
+        el('h1', { class: 'hero__name reveal', text: PROFILE.name }),
+        el('p', { class: 'hero__tagline reveal', html: rich(PROFILE.tagline) }),
+        el('div', { class: 'hero__actions reveal' }, [
+          el('a', { href: 'work.html', class: 'btn btn--primary', html: 'View projects ' + arrow() }),
+          el('a', { href: 'resume.html', class: 'btn', html: icon('pdf') + ' Resume' })
+        ])
       ]),
+      el('div', { class: 'hero__photo reveal' }, el('img', { src: PROFILE.photo, alt: PROFILE.name, width: 480, height: 600 })),
       el('div', { class: 'facts reveal' }, PROFILE.facts.map(function (f) {
         return el('div', { class: 'fact' }, [el('span', { class: 'fact__value', text: f.value }), el('span', { class: 'fact__label', text: f.label })]);
       }))
@@ -128,14 +133,32 @@
   function renderWork() {
     var root = document.getElementById('work-grid'); if (!root) return;
     var list = sorted();
+    var max = parseInt(root.getAttribute('data-max') || '0', 10);
     var count = document.getElementById('work-count'); if (count) count.textContent = String(list.length).padStart(2, '0') + ' projects';
-    list.forEach(function (p) { root.appendChild(tile(p)); });
+    (max ? list.slice(0, max) : list).forEach(function (p) { root.appendChild(tile(p)); });
+  }
+
+  function renderCta() {
+    var root = document.getElementById('cta'); if (!root) return;
+    root.appendChild(el('div', { class: 'container cta reveal' }, [
+      el('div', {}, [
+        el('h2', { text: 'Open to internships and engineering roles.' }),
+        el('p', { class: 'muted', text: 'Mechanical design, mechatronics and hardware. ' + PROFILE.location + ' and the New York area.' })
+      ]),
+      el('div', { class: 'links' }, [
+        el('a', { href: 'contact.html', class: 'btn btn--primary', html: 'Contact ' + arrow() }),
+        el('a', { href: 'about.html', class: 'btn', text: 'About me' })
+      ])
+    ]));
   }
 
   function renderAbout() {
     var root = document.getElementById('about-root'); if (!root) return;
     root.appendChild(el('div', { class: 'about' }, [
-      el('div', { class: 'about__bio reveal' }, PROFILE.bio.map(function (para) { return el('p', { html: rich(para) }); })),
+      el('div', { class: 'reveal' }, [
+        el('div', { class: 'about__photo' }, el('img', { src: PROFILE.photo, alt: PROFILE.name, width: 480, height: 600 })),
+        el('div', { class: 'about__bio' }, PROFILE.bio.map(function (para) { return el('p', { html: rich(para) }); }))
+      ]),
       el('div', { class: 'card reveal' }, [
         el('h3', { text: 'Education' }),
         el('div', {}, PROFILE.education.map(function (e) {
@@ -222,7 +245,7 @@
       root.appendChild(el('div', { class: 'container section' }, [
         el('h1', { text: 'Project not found' }),
         el('p', { class: 'muted', style: 'margin:12px 0 24px', text: 'No project with id "' + (id || '') + '".' }),
-        el('a', { href: 'index.html#work', class: 'btn', text: 'Back to all projects' })
+        el('a', { href: "work.html", class: "btn", text: "Back to all projects" })
       ]));
       return;
     }
@@ -233,7 +256,7 @@
     root.appendChild(c);
 
     c.appendChild(el('div', { class: 'phero' }, [
-      el('a', { href: 'index.html#work', class: 'back reveal', html: '← All projects' }),
+      el('a', { href: 'work.html', class: 'back reveal', html: '← All projects' }),
       el('span', { class: 'eyebrow reveal', text: p.category }),
       el('h1', { class: 'phero__title reveal', text: p.title }),
       el('p', { class: 'phero__sub reveal', html: rich(p.subtitle) }),
@@ -349,6 +372,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    renderNav(); renderHero(); renderWork(); renderAbout(); renderContact(); renderProject(); renderResume(); renderFooter(); reveal();
+    renderNav(); renderHero(); renderWork(); renderCta(); renderAbout(); renderContact(); renderProject(); renderResume(); renderFooter(); reveal();
   });
 })();
