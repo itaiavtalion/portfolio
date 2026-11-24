@@ -100,7 +100,6 @@
         p.draft ? el('span', { class: 'tile__badge', text: 'In progress' }) : null,
         el('span', { class: 'tile__arrow', html: arrow() }),
         el('div', { class: 'tile__overlay' }, [
-          el('span', { class: 'eyebrow', text: p.category }),
           el('h3', { class: 'tile__title', text: p.title })
         ])
       ]),
