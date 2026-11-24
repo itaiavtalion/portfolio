@@ -171,7 +171,14 @@
         el('h3', { text: 'Languages' }),
         el('div', { class: 'chips' }, PROFILE.languages.map(function (l) { return el('span', { class: 'chip', text: l }); })),
         el('h3', { text: 'Beyond engineering' }),
-        el('div', { class: 'chips' }, PROFILE.hobbies.map(function (h) { return el('span', { class: 'chip', html: rich(h) }); }))
+        el('div', { class: 'chips' }, PROFILE.hobbies.map(function (h) { return el('span', { class: 'chip', html: rich(h) }); })),
+        el('h3', { text: 'Find me' }),
+        el('div', { class: 'links links--compact' }, [
+          PROFILE.contact.linkedin ? el('a', { href: PROFILE.contact.linkedin, class: 'btn', target: '_blank', rel: 'noopener', html: 'LinkedIn ' + arrow() }) : null,
+          el('a', { href: PROFILE.contact.github, class: 'btn', target: '_blank', rel: 'noopener', html: 'GitHub ' + arrow() }),
+          el('a', { href: 'mailto:' + PROFILE.contact.email, class: 'btn', text: 'Email' }),
+          el('a', { href: PROFILE.contact.resume, class: 'btn', target: '_blank', rel: 'noopener', html: icon('pdf') + ' Resume' })
+        ])
       ])
     ]));
     root.appendChild(el('div', { class: 'skillgroups reveal' }, PROFILE.skills.map(function (g) {
